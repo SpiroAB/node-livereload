@@ -1,4 +1,5 @@
 runner = ->
+  fs         = require('fs');
   pjson      = require('../package.json')
   version    = pjson.version
   livereload = require './livereload'
@@ -59,6 +60,20 @@ runner = ->
       value: true
     }
     {
+      short: "k"
+      long: "key",
+      description: "Path to certificate key file.",
+      required: false,
+      value: true
+    }
+    {
+      short: "c"
+      long: "cert",
+      description: "Path to certificate file.",
+      required: false,
+      value: true
+    }
+    {
       short: "u"
       long: "usepolling"
       description: "Poll for file system changes. Set this to true to successfully watch files over a network.",
@@ -92,6 +107,11 @@ runner = ->
   };
   if opts.get('https')
     options = {https: options}
+    options.https.key = fs.readFileSync(if opts.get('key') then opts.get('key') else '/cert/local.key')
+    options.https.cert = fs.readFileSync(if opts.get('cert') then opts.get('cert') else '/cert/local.crt')
+    options.https.requestCert = false;
+    options.https.rejectUnauthorized = false;
+
   server = livereload.createServer(options)
 
   path = (process.argv[2] || '.')
