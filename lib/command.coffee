@@ -52,6 +52,13 @@ runner = ->
       value: true
     }
     {
+      short: "h"
+      long: "https",
+      description: "Use https instead of http.",
+      required: false,
+      value: true
+    }
+    {
       short: "u"
       long: "usepolling"
       description: "Poll for file system changes. Set this to true to successfully watch files over a network.",
@@ -71,6 +78,7 @@ runner = ->
   exclusions = if opts.get('exclusions') then opts.get('exclusions' ).split(',' ).map((s) -> new RegExp(s)) else []
   exts = if opts.get('exts') then opts.get('exts').split(',').map((ext) -> ext.trim()) else  []
   extraExts = if opts.get('extraExts') then opts.get('extraExts').split(',').map((ext) -> ext.trim()) else  []
+  https = opts.get('https') || false
   usePolling = opts.get('usepolling') || false
   wait = opts.get('wait') || 0;
 
@@ -80,6 +88,7 @@ runner = ->
     exclusions: exclusions,
     exts: exts
     extraExts: extraExts
+    https: https
     usePolling: usePolling
     delay: wait
   })
