@@ -78,20 +78,21 @@ runner = ->
   exclusions = if opts.get('exclusions') then opts.get('exclusions' ).split(',' ).map((s) -> new RegExp(s)) else []
   exts = if opts.get('exts') then opts.get('exts').split(',').map((ext) -> ext.trim()) else  []
   extraExts = if opts.get('extraExts') then opts.get('extraExts').split(',').map((ext) -> ext.trim()) else  []
-  https = opts.get('https') || false
   usePolling = opts.get('usepolling') || false
   wait = opts.get('wait') || 0;
 
-  server = livereload.createServer({
+  options = {
     port: port
     debug: debug
-    exclusions: exclusions,
+    exclusions: exclusions
     exts: exts
     extraExts: extraExts
-    https: https
     usePolling: usePolling
     delay: wait
-  })
+  };
+  if opts.get('https')
+    options = {https: options}
+  server = livereload.createServer(options)
 
   path = (process.argv[2] || '.')
     .split(/\s*,\s*/)
